@@ -1,0 +1,49 @@
+# Quant-Bench 2026 Configuration
+
+# Model configurations
+models:
+  gemma-3-4b:
+    hf_name: "google/gemma-3-4b"
+    context_length: 8192
+    default_bits: 4
+
+  llama-3-8b:
+    hf_name: "meta-llama/Llama-3-8B"
+    context_length: 8192
+    default_bits: 4
+
+# Quantization settings
+quantization:
+  formats:
+    - name: awq
+      bits: [4, 3, 2]
+      group_size: 128
+    - name: gptq
+      bits: [4, 3]
+      group_size: 128
+    - name: fp8
+      format: "e4m3"
+    - name: int8
+      symmetric: true
+
+# Benchmark settings
+benchmarks:
+  tasks:
+    - mmlu-pro
+    - humaneval
+    - gsm8k
+    - truthfulqa
+  batch_sizes: [1, 4, 8, 16]
+  num_iterations: 100
+
+# Output settings
+output:
+  results_dir: "./results"
+  save_format: "json"
+  plot_results: true
+
+# Hardware settings
+hardware:
+  device: "cuda:0"
+  memory_tracking: true
+  profile_torch: false
